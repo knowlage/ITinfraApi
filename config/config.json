@@ -1,0 +1,25 @@
+{
+    "auth":{
+        "secret_key":"Infra"
+    },
+    "ldap":{
+        "url":"10.35.1.16:19489"
+    },   
+    "database":{
+        "host":"mysql_db",
+        "port":3306,
+        "user":"root",
+        "password":"rootpassword",
+        "database":"itinfra"
+    },
+    "database_org":{
+        "host":"10.44.48.185",
+        "port":3306,
+        "user":"admin_itinfra",
+        "password":"Itinfra@123",
+        "database":"itinfra"  
+    }
+}
+
+
+ 

@@ -1,0 +1,27 @@
+########### config folder #######################
+description: forder for file configulation
+element : 
+auth => secret_key
+ldap => url
+database => host 
+            port 
+            user 
+            password 
+            database
+
+
+
+############## controllers folder ####################
+description: forder for router and logic control
+element:
+index.js => file center collect another router 
+auth.js => file router and logic for login with ldap server and then generate token.
+users.js => file router and logic for users operater.
+
+
+
+############## middleware folder ####################
+description: forder for middleware 
+element:
+loginLdapMiddleware.js => middleware for user login and get token before access any data.
+hasRoleMiddleware.js => middleware for check role of user can access data or not.
