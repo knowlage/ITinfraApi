@@ -6,11 +6,11 @@ const router = express.Router()
 const conn = mysql.createPool(config.database)
 
 router.get('/',(req,res) => {
-    res.end('hi download page')
+    res.end('news api')
 })
 
-router.get('/getUploads',(req,res) => {
-    let sql = 'call Upload_get_upload()'
+router.get('/getnews',(req,res) => {
+    let sql = 'call News_get_news()'
     conn.getConnection((err,connection) => {
         if(err){
             res.status(400).json({"code":0,"message":err})
@@ -23,36 +23,36 @@ router.get('/getUploads',(req,res) => {
                 if(rs[0].length > 0){
                     res.status(200).json({"code":1,"message":"Access Complete","data":rs[0]})
                 }else{
-                    res.status(200).json({"code":0,"message":"Upload Not Found"})
-                }  
+                    res.status(200).json({"code":0,"message":"News Not Found"})
+                }
             }
         })
     })
+
 })
 
-router.get('/getUploadSearch/:search?',(req,res) => {
-    let sql = 'call Upload_search(?)'
+router.get('/getNewsSearch/:search?',(req,res) => {
+    let sql = 'call News_search(?)'
     conn.getConnection((err,connection) => {
         if(err){
             res.status(400).json({"code":0,"message":err})
         }
         connection.query(sql,[req.params.search || ' '],(err,rs,field) => {
-            connection.release()
             if(err){
                 res.status(400).json({"code":0,"message":err})
             }else{
                 if(rs[0].length > 0){
                     res.status(200).json({"code":1,"message":"Access Complete","data":rs[0]})
                 }else{
-                    res.status(200).json({"code":0,"message":"Upload Not Found"})
+                    res.status(200).json({"code":0,"message":"News Not Found"})
                 }
             }
         })
     })
 })
 
-router.get('/getUploadFeature',(req,res) => {
-    let sql = 'call Upload_get_upload_feature()'
+router.get('/getNewsFeature',(req,res) => {
+    let sql = 'call News_get_news_feature()'
     conn.getConnection((err,connection) => {
         if(err){
             res.status(400).json({"code":0,"message":err})
@@ -65,7 +65,7 @@ router.get('/getUploadFeature',(req,res) => {
                 if(rs[0].length > 0){
                     res.status(200).json({"code":1,"message":"Access Complete","data":rs[0]})
                 }else{
-                    res.status(200).json({"code":0,"message":"Upload Not Found"})
+                    res.status(200).json({"code":0,"message":"News Not Found"})
                 }
             }
         })

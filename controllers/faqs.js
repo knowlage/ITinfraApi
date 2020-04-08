@@ -27,14 +27,14 @@ router.get('/getfaqs',(req,res) => {
     
 })
 
-router.get('/getFaqsSearch/:_search',(req,res) => {   
+router.get('/getFaqsSearch/:_search?',(req,res) => {   
 
     let sql = "call FAQs_search(?)"
     conn.getConnection((err,connection) => {
         if(err){
             res.status(400).json({"code":0,"message":err})
         }
-        connection.query(sql,[req.params._search],(err,rs,field) => {
+        connection.query(sql,[req.params._search || ' '],(err,rs,field) => {
             connection.release()
             if(err){
                 res.status(400).json({"code":0,"message":err})
