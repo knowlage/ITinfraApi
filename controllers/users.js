@@ -12,7 +12,7 @@ router.get('/',(req,res) => {
     res.status(200).send('users page')
 })
 
-router.get('/detail',hasRoleMiddleware(['manager']),(req,res) => {    
+router.get('/detail',hasRoleMiddleware(['super_admin','manager']),(req,res) => {    
     var decoded = jwt.decode(req.headers.authorization)
     let sql = 'call Eim_get_user(?)' 
     conn.getConnection((err,connection) => {
