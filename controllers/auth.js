@@ -9,7 +9,7 @@ const router = express.Router()
 const conn = mysql.createPool(config.database)
 
 // loginLdapMiddleware
-router.post("/login", (req, res) => {
+router.post("/login",loginLdapMiddleware, (req, res) => {
   getUserRole(req.body.username)
   .then(rs => {
     let token = jwt.sign(
