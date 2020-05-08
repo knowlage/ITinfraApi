@@ -9,9 +9,9 @@ const router = express.Router()
 const conn = mysql.createPool(config.database)
 
 // loginLdapMiddleware
-router.post("/login",loginLdapMiddleware, (req, res) => {
+router.post("/login", (req, res) => {
   getUserRole(req.body.username)
-  .then(rs => {
+  .then(rs => {    
     let token = jwt.sign(
       {
         sub: req.body.username,
@@ -41,6 +41,7 @@ var getUserRole = (user_id) => {
           reject(err)
         }else{
           if(rs[0].length > 0){
+            console.log(rs)
             resolve(rs[0][0]['role_name'])
           }else{
             resolve('registered')

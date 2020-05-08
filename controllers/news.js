@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql2')
 const config = require('../config/config.json')
+const hasRoleMiddleWare = require('../middlewares/hasRoleMiddleware')
 
 const router = express.Router()
 const conn = mysql.createPool(config.database)
@@ -67,6 +68,27 @@ router.get('/getNewsSearch/:search?',(req,res) => {
                     res.status(200).json({"code":1,"message":"Access Complete","data":rs[0]})
                 }else{
                     res.status(200).json({"code":0,"message":"News Not Found"})
+                }
+            }
+        })
+    })
+})
+
+router.get('/getNewsFileExport/:title?',(req,res) => {
+    let sql = 'call News_file_export(?)'
+    conn.getConnection((err,connection) => {
+        if(err){
+            res.status(400).json({"code":0, "message":err})
+        }
+        connection.query(sql,[req.params.title || '.'],(err,rs,field) => {
+            connection.release()
+            if(err){
+                res.status(400).json({"code":0, "message":err})
+            }else{
+                if(rs[0].length > 0){
+                    res.status(200).json({"code":1, "message":"Access Complete", "data":rs[0], "field":field})
+                }else{
+                    res.status(200).json({"code":1, "message":"News Not Found"})
                 }
             }
         })
