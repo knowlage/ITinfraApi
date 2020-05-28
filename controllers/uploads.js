@@ -1,9 +1,23 @@
 const express = require('express')
 const mysql = require('mysql2')
 const config = require('../config/config.json')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
 
 const router = express.Router()
 const conn = mysql.createPool(config.database)
+
+var storage = multer.diskStorage({
+    destination:(req, file, cb) => {
+        cb(null, path.join(__dirname,"../assets/uploads/"))
+    },
+    filename:(req, file, cb)=> {
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({storage: storage})
 
 router.get('/',(req,res) => {
     res.end('hi download page')
@@ -71,5 +85,35 @@ router.get('/getUploadFeature',(req,res) => {
         })
     })
 })
+
+router.post('/uploadFile', upload.single('file'), (req, res) => {
+    res.status(200).json({"code":1, "message":"UploadFile Complete"})
+})
+
+router.get('/uploadFile', (req, res) => {
+    let dir = path.join(__dirname,"../assets/uploads/")
+    let files = fs.readdirSync(dir)
+        .map(f => {
+            return{
+                name:f,
+                time:fs.statSync(dir + f).mtime.getTime(),
+                type:path.extname(f)
+            }
+        })
+        .sort((a, b) => {
+            return b.time - a.time
+        })
+    console.log(files)       
+    res.status(200).json({"code":1,"message":"get success","data":files})
+
+})
+
+router.delete('/deleteUploadFile/:fileName', (req, res) => {
+    let file = req.params.fileName
+    let dir = path.join(__dirname,"../assets/uploads/")
+    fs.unlinkSync(dir + file)
+    res.status(200).json({"code":1,"message":"delete success"})
+})
+
 
 module.exports = router
