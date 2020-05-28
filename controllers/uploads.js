@@ -17,7 +17,17 @@ var storage = multer.diskStorage({
     }
 })
 
+var carouselStorage = multer.diskStorage({
+    destination:(req, file, cb) => {
+        cb(null, path.join(__dirname,"../assets/carousel/"))
+    },
+    filename:(req, file, cb) => {
+        cb(null, file.originalname)
+    }
+})
+
 const upload = multer({storage: storage})
+const carouselUpload = multer({storage: carouselStorage})
 
 router.get('/',(req,res) => {
     res.end('hi download page')
@@ -90,6 +100,8 @@ router.post('/uploadFile', upload.single('file'), (req, res) => {
     res.status(200).json({"code":1, "message":"UploadFile Complete"})
 })
 
+
+
 router.get('/uploadFile', (req, res) => {
     let dir = path.join(__dirname,"../assets/uploads/")
     let files = fs.readdirSync(dir)
@@ -103,7 +115,7 @@ router.get('/uploadFile', (req, res) => {
         .sort((a, b) => {
             return b.time - a.time
         })
-    console.log(files)       
+           
     res.status(200).json({"code":1,"message":"get success","data":files})
 
 })
@@ -113,6 +125,35 @@ router.delete('/deleteUploadFile/:fileName', (req, res) => {
     let dir = path.join(__dirname,"../assets/uploads/")
     fs.unlinkSync(dir + file)
     res.status(200).json({"code":1,"message":"delete success"})
+})
+
+router.delete('/deleteCarouselFile/:fileName', (req, res) => {
+    let file = req.params.fileName
+    let dir = path.join(__dirname,"../assets/carousel/")
+    fs.unlinkSync(dir + file)
+    res.status(200).json({"code":1,"message":"delete success"})
+})
+
+router.post('/uploadCarouselFile', carouselUpload.single('file'), (req, res) => {
+    res.status(200).json({"code":1, "message":"UploadCarouselFile Complete"})
+} )
+
+router.get('/carouselFile', (req, res) => {
+    let dir = path.join(__dirname,"../assets/carousel/")
+    let files = fs.readdirSync(dir)
+        .map(f => {
+            return{
+                name:f,
+                time:fs.statSync(dir + f).mtime.getTime(),
+                type:path.extname(f)
+            }
+        })
+        .sort((a, b) => {
+            return b.time - a.time
+        })
+           
+    res.status(200).json({"code":1,"message":"get success","data":files})
+
 })
 
 

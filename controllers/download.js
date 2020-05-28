@@ -11,6 +11,10 @@ router.get('/file/:filename',(req,res)=> {
     res.download(path.join(__dirname,"../assets/uploads/"+req.params.filename))
 })
 
+router.get('/carousel/:filename',(req,res)=> {
+    res.download(path.join(__dirname,"../assets/carousel/"+req.params.filename))
+})
+
 router.get('/getDownloadAll', (req, res) => {
     let sql = 'call Upload_get_upload_all()'
     conn.getConnection((err, connection) => {
