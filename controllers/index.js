@@ -9,5 +9,6 @@ router.use('/download', require('./download'))
 router.use('/news', require('./news'))
 router.use('/contacts', require('./contacts'))
 router.use('/carousels', require('./carousels'))
+router.use('/dashboard', require('./dashboard'))
 
 module.exports = router
