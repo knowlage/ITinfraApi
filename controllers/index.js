@@ -10,5 +10,7 @@ router.use('/news', require('./news'))
 router.use('/contacts', require('./contacts'))
 router.use('/carousels', require('./carousels'))
 router.use('/dashboard', require('./dashboard'))
+router.use('/computer', require('./computer'))
+router.use('/software', require('./software'))
 
 module.exports = router
