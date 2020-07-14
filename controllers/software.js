@@ -9,8 +9,9 @@ router.get('/',(req, res) => {
     res.end('Software Api')
 })
 
-router.get('/getSoftwares', (req, res) => {
-    let sql = 'call Dashboard_software_summary()'
+
+router.get('/getSoftwareBalance', (req, res) => {
+    let sql = 'call Software_get_balance'
     conn.getConnection((err, connection) => {
         if(err){
             res.status(400).json({"code":0, "message":err})
@@ -30,13 +31,13 @@ router.get('/getSoftwares', (req, res) => {
     })
 })
 
-router.get('/getSoftwareBalance', (req, res) => {
-    let sql = 'call Dashboard_software_balance()'
+router.get('/getSoftwareByEmployeenumber/:employeenumber?', (req, res) => {    
+    let sql = 'call Software_search_by_employeenumber(?)'
     conn.getConnection((err, connection) => {
         if(err){
             res.status(400).json({"code":0, "message":err})
         }
-        connection.query(sql, (err, rs, field) => {
+        connection.query(sql,[req.params.employeenumber || ' '],(err, rs, field) => {
             connection.release()
             if(err){
                 res.status(400).json({"code":0, "message":err})
@@ -49,6 +50,7 @@ router.get('/getSoftwareBalance', (req, res) => {
             }
         })
     })
+
 })
 
 module.exports = router
